@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dark Blue | Bold Alarm Timer</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: radial-gradient(circle at top, #020024, #021428, #000000);
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.07);
+      padding: 45px 55px;
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0px 15px 35px rgba(0,0,0,0.6);
+      text-align: center;
+      width: 360px;
+      animation: fadeIn 0.6s ease-in-out;
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(-8px);}
+      to   {opacity: 1; transform: translateY(0);}
+    }
+
+    h2 {
+      font-weight: 500;
+      margin-bottom: 20px;
+      letter-spacing: 1px;
+      color: #74a9ff;
+      text-shadow: 0 0 10px rgba(0,150,255,0.5);
+    }
+
+    input {
+      width: 80%;
+      padding: 12px;
+      font-size: 18px;
+      border: none;
+      outline: none;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+      background: rgba(255,255,255,0.15);
+      color: white;
+    }
+
+    input::placeholder { color: #8da7bd; }
+
+    button {
+      padding: 12px 25px;
+      font-size: 18px;
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      cursor: pointer;
+      background: linear-gradient(45deg, #007bff, #003b8e);
+      transition: 0.25s;
+      box-shadow: 0px 0px 10px rgba(0,110,255,0.5);
+    }
+
+    button:hover {
+      transform: scale(1.07);
+      opacity: 0.9;
+    }
+
+    #timer {
+      margin-top: 25px;
+      font-size: 60px;
+      font-weight: bold;
+      color: #82c7ff;
+      text-shadow: 0 0 20px rgba(0,180,255,0.6);
+    }
+  </style>
+
+</head>
+<body>
+  
+  <div class="container">
+    <h2>Countdown⏳</h2>
+
+    <input id="secondsInput" type="number" placeholder="Enter seconds">
+
+    <button onclick="startTimer()">Start Timer</button>
+
+    <div id="timer"></div>
+  </div>
+
+<script>
+  // Much bolder, longer, stronger alarm sound
+  let beep = new Audio("https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3");
+  beep.volume = 1.0;  // Make sure it's loud
+
+  function startTimer() {
+    let seconds = parseInt(document.getElementById("secondsInput").value);
+    if (isNaN(seconds) || seconds <= 0) return;
+
+    document.getElementById("timer").innerText = seconds;
+
+    Notification.requestPermission();
+
+    let interval = setInterval(() => {
+      seconds--;
+      document.getElementById("timer").innerText = seconds;
+
+      if (seconds <= 0) {
+        clearInterval(interval);
+        
+        if (Notification.permission === "granted") {
+          new Notification("⏰ Bold Timer Alert!");
+        }
+
+        beep.play();
+      }
+    }, 1000);
+  }
+</script>
+
+</body>
+</html>
+
