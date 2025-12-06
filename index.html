@@ -1,50 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Dark Blue | Bold Alarm Timer</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
+  <title>Dark Premium Countdown Timer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       margin: 0;
       font-family: "Poppins", sans-serif;
-      background: radial-gradient(circle at top, #020024, #021428, #000000);
+      background: linear-gradient(150deg, #000814, #001d3d, #000000);
+      background-attachment: fixed;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       color: white;
+      overflow: hidden;
     }
-
+    .orb {
+      position: absolute;
+      width: 250px;
+      height: 250px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,119,255,0.5), rgba(0,0,0,0.1));
+      animation: float 7s infinite ease-in-out alternate;
+      filter: blur(30px);
+    }
+    .orb:nth-child(1) { top: 10%; left: 8%; animation-duration: 6s; }
+    .orb:nth-child(2) { bottom: 10%; right: 10%; animation-duration: 8s; }
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      100% { transform: translateY(-40px); }
+    }
     .container {
-      background: rgba(255, 255, 255, 0.07);
-      padding: 45px 55px;
+      background: rgba(255, 255, 255, 0.06);
+      padding: 50px 55px;
       border-radius: 20px;
       backdrop-filter: blur(12px);
-      box-shadow: 0px 15px 35px rgba(0,0,0,0.6);
+      box-shadow: 0px 10px 30px rgba(0,0,0,0.7), inset 0 0 25px rgba(0,150,255,0.3);
       text-align: center;
-      width: 360px;
-      animation: fadeIn 0.6s ease-in-out;
-      border: 1px solid rgba(255,255,255,0.18);
+      width: 370px;
+      border: 2px solid rgba(0,150,255,0.3);
+      animation: slideUp 0.7s ease, glowPulse 2s infinite ease-in-out alternate;
     }
-
-    @keyframes fadeIn {
-      from {opacity: 0; transform: translateY(-8px);}
-      to   {opacity: 1; transform: translateY(0);}
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0px); }
     }
-
+    @keyframes glowPulse {
+      from { box-shadow: 0px 10px 30px rgba(0,0,0,0.5), inset 0 0 15px rgba(0,150,255,0.2); }
+      to { box-shadow: 0px 10px 35px rgba(0,0,0,0.7), inset 0 0 30px rgba(0,150,255,0.6); }
+    }
     h2 {
-      font-weight: 500;
+      font-weight: 600;
       margin-bottom: 20px;
-      letter-spacing: 1px;
-      color: #74a9ff;
-      text-shadow: 0 0 10px rgba(0,150,255,0.5);
+      color: #7bc9ff;
+      text-shadow: 0 0 15px rgba(0,140,255,0.7);
     }
-
     input {
       width: 80%;
-      padding: 12px;
+      padding: 14px;
       font-size: 18px;
       border: none;
       outline: none;
@@ -53,79 +67,74 @@
       text-align: center;
       background: rgba(255,255,255,0.15);
       color: white;
+      box-shadow: inset 0 0 10px rgba(0,150,255,0.3);
     }
-
-    input::placeholder { color: #8da7bd; }
-
+    input::placeholder { color: #9bbcd7; }
     button {
-      padding: 12px 25px;
+      padding: 13px 26px;
       font-size: 18px;
       border: none;
       border-radius: 12px;
       color: #fff;
       cursor: pointer;
-      background: linear-gradient(45deg, #007bff, #003b8e);
+      background: linear-gradient(45deg, #00b4ff, #0057ff);
       transition: 0.25s;
-      box-shadow: 0px 0px 10px rgba(0,110,255,0.5);
+      box-shadow: 0px 0px 10px rgba(0,130,255,0.5);
+      overflow: hidden;
     }
-
     button:hover {
       transform: scale(1.07);
-      opacity: 0.9;
+      opacity: 0.92;
     }
-
     #timer {
       margin-top: 25px;
-      font-size: 60px;
+      font-size: 70px;
       font-weight: bold;
-      color: #82c7ff;
-      text-shadow: 0 0 20px rgba(0,180,255,0.6);
+      color: #9ad8ff;
+      text-shadow: 0 0 20px rgba(0,200,255,0.8);
+      animation: pulseTime 1.3s infinite ease-in-out alternate;
+    }
+    @keyframes pulseTime {
+      from { transform: scale(1); }
+      to   { transform: scale(1.06); }
     }
   </style>
-
 </head>
 <body>
-  
+  <div class="orb"></div>
+  <div class="orb"></div>
   <div class="container">
-    <h2>Countdown⏳</h2>
-
+    <h2>Timer⏳</h2>
     <input id="secondsInput" type="number" placeholder="Enter seconds">
-
     <button onclick="startTimer()">Start Timer</button>
-
     <div id="timer"></div>
   </div>
-
 <script>
-  // Much bolder, longer, stronger alarm sound
   let beep = new Audio("https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3");
-  beep.volume = 1.0;  // Make sure it's loud
-
+  beep.volume = 1;
   function startTimer() {
     let seconds = parseInt(document.getElementById("secondsInput").value);
     if (isNaN(seconds) || seconds <= 0) return;
-
     document.getElementById("timer").innerText = seconds;
-
-    Notification.requestPermission();
-
+    Notification.requestPermission(); 
     let interval = setInterval(() => {
       seconds--;
       document.getElementById("timer").innerText = seconds;
 
       if (seconds <= 0) {
         clearInterval(interval);
-        
         if (Notification.permission === "granted") {
-          new Notification("⏰ Bold Timer Alert!");
+          new Notification("⏰ Timer Completed!", {
+            body: "Your countdown is finished.",
+            icon: "https://cdn-icons-png.flaticon.com/512/992/992700.png"
+          });
+        } else {
+          alert("⏰ Timer Completed!");
         }
-
         beep.play();
       }
     }, 1000);
   }
 </script>
-
 </body>
 </html>
-
